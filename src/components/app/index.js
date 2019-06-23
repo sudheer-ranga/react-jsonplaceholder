@@ -2,6 +2,7 @@ import React from 'react';
 import './app.css';
 import axios from 'axios';
 import Posts from './../posts';
+import Pagination from '../pagination';
 
 class App extends React.Component {
 
@@ -22,12 +23,16 @@ class App extends React.Component {
   }
 
   render () {
+    let postsDom = (
+      <React.Fragment>
+        <Posts posts={ this.state.posts } />
+        <Pagination />
+      </React.Fragment>
+    );
     
     return (
       <div className="app">
-        <h2>All Posts</h2>
-
-        { this.state.isLoading ? 'Loading Posts...' : <Posts posts={ this.state.posts } /> }
+        { this.state.isLoading ? 'Loading Posts...' : postsDom }
       </div>
     );
   };
