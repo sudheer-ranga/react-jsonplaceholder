@@ -22,10 +22,17 @@ class Post extends React.Component {
     render () {
         const { post, isLoading } = this.state;
         const postDom = (
-            <div className="post">
-                <h2>{ post.title }</h2>
-                <p>{ post.body }</p>
-            </div>
+            <React.Fragment>
+                <h3 className="pb-4 mb-4 font-italic border-bottom text-center">Full Post</h3>
+                <div className="row justify-content-center">
+                    <div className="col-md-6 blog-main">
+                        <div className="blog-main">
+                            <h2 className="blog-title">{ post.title }</h2>
+                            <p>{ post.body }</p>
+                        </div>
+                    </div>
+                </div>
+            </React.Fragment>
         );
         
         return (

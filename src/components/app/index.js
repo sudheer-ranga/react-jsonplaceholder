@@ -6,10 +6,38 @@ import Pagination from '../pagination';
 
 class App extends React.Component {
 
+  constructor () {
+    super();
+    this.paginate = this.paginate.bind(this);
+  }
+
   state = {
     posts: [],
-    isLoading: false
+    currentPosts: [],
+    isLoading: false,
+    currentPage: 1,
+    currentPostIndex: 0,
+    postsPerPage: 6
   };
+
+  getCurrentPosts () {
+    const startCount = this.state.currentPostIndex;
+    const endCount = this.state.currentPage * this.state.postsPerPage;
+    const currentPosts = this.state.posts.slice(startCount, endCount);
+
+    this.setState({ currentPosts });
+  };
+
+  paginate (index) {
+    this.setState({ currentPage: index }, () => {
+      const { currentPage, postsPerPage } = this.state;
+      const currentPostIndex = (currentPage * postsPerPage) - postsPerPage;
+
+      this.setState({ currentPostIndex }, () => {
+        this.getCurrentPosts();
+      });
+    });
+  }
 
   componentWillMount () {
     this.setState({ isLoading: true });
@@ -19,14 +47,19 @@ class App extends React.Component {
         const posts = res.data;
         this.setState({ posts });
         this.setState({ isLoading: false });
+
+        this.getCurrentPosts();
       });
   }
 
   render () {
+    const totalPages = Math.ceil(this.state.posts.length / this.state.postsPerPage);
+    
     let postsDom = (
       <React.Fragment>
-        <Posts posts={ this.state.posts } />
-        <Pagination />
+        <Posts posts={ this.state.currentPosts } />
+        
+        <Pagination totalPages={ totalPages } paginate={ this.paginate } currentPage={ this.state.currentPage } />
       </React.Fragment>
     );
     
